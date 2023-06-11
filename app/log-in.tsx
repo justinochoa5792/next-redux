@@ -1,23 +1,37 @@
 import React, { useState } from "react";
+import { logOut, logIn, toggleModerator } from "./redux/features/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "./redux/store";
+import { useAppSelector } from "./redux/features/authSlice";
 
 const Login = () => {
   const [username, setUsername] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
 
-  const onClickLogin = () => {};
+  const onClickLogin = () => {
+    dispatch(logIn(username));
+  };
 
-  const onClickToggle = () => {};
+  const onClickToggle = () => {
+    dispatch(toggleModerator());
+  };
 
-  const onClickLogout = () => {};
+  const onClickLogout = () => {
+    dispatch(logOut());
+  };
 
   return (
     <div>
       <input type="text" onChange={(e) => setUsername(e.target.value)} />
       <br />
-      <button>Log In </button>
+      <button onClick={onClickLogin}>Log In </button>
       <br />
-      <button>Log Out</button>
+      <button onClick={onClickLogout}>Log Out</button>
       <br />
-      <button>Toggle Moderator Status</button>
+      {isAuth && (
+        <button onClick={onClickToggle}>Toggle Moderator Status</button>
+      )}
     </div>
   );
 };
